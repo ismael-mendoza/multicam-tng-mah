@@ -19,8 +19,12 @@ dependencies = [
     "h5py >=3.9.0",
     "pandas >=2.1.1",
     "AbundanceMatching>=0.3.0",
+    "multicam",
 ]
 requires-python = ">= 3.11"
+
+[tool.uv.sources]
+multicam = { git = "https://github.com/ismael-mendoza/multicam", branch = "main" }
 
 [project.optional-dependencies]
 dev = ["pytest", "ruff", "ipython", "ipykernel", "jupyter", "matplotlib"]
@@ -30,7 +34,7 @@ dev = ["pytest", "ruff", "ipython", "ipykernel", "jupyter", "matplotlib"]
 home = "https://github.com/ismael-mendoza/multicam"
 
 [tool.setuptools.packages.find]
-include = ["multicam*"]
+include = ["multicam_tng*"]
 
 [tool.ruff]
 exclude = [

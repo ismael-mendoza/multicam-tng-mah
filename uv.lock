@@ -1327,6 +1327,17 @@ wheels = [
 ]
 
 [[package]]
+name = "multicam"
+version = "0.0.1"
+source = { git = "https://github.com/ismael-mendoza/multicam?branch=main#1b915d7773a3af1ece90704cc7522eaae0098c00" }
+dependencies = [
+    { name = "astropy" },
+    { name = "numpy" },
+    { name = "scikit-learn" },
+    { name = "scipy" },
+]
+
+[[package]]
 name = "multicam-tng"
 version = "0.0.1"
 source = { editable = "." }
@@ -1334,6 +1345,7 @@ dependencies = [
     { name = "abundancematching" },
     { name = "astropy" },
     { name = "h5py" },
+    { name = "multicam" },
     { name = "numpy" },
     { name = "pandas" },
     { name = "scikit-learn" },
@@ -1360,6 +1372,7 @@ requires-dist = [
     { name = "ipython", marker = "extra == 'dev'" },
     { name = "jupyter", marker = "extra == 'dev'" },
     { name = "matplotlib", marker = "extra == 'dev'" },
+    { name = "multicam", git = "https://github.com/ismael-mendoza/multicam?branch=main" },
     { name = "numpy", specifier = ">=1.22.0" },
     { name = "pandas", specifier = ">=2.1.1" },
     { name = "pytest", marker = "extra == 'dev'" },
