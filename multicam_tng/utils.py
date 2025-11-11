@@ -36,7 +36,7 @@ def convert_tng_mass(gmass):
 
 
 def get_mpeak_from_mah(mah: np.ndarray):
-    """Compute m_peak from mah."""
+    """Compute m_peak from (log10) mah."""
     assert mah.ndim == 2
     m_peak1 = np.fmax.accumulate(10**mah, axis=1)
     m_peak = m_peak1 / m_peak1[:, -1][:, None]
@@ -58,7 +58,7 @@ def get_vmax_over_vvir(cat: pd.DataFrame):
 def _reverse_trees(trees):
     """Reverse each entry in trees so that order is from early to late times."""
     for tree in trees:
-        for key in tree.keys():
+        for key in tree.keys():  # noqa
             if key not in ["Number", "ChunkNumber", "TreeID"]:
                 tree[key] = tree[key][::-1]
     return trees
@@ -70,13 +70,19 @@ def read_trees(trees_file: str):
         _trees = pickle.load(pickle_file)
         trees = _reverse_trees(_trees)
         for tree in trees:
-            for k in tree.keys():
+            for k in tree.keys():  # noqa
                 if "Mass" in k or "_M_" in k:
                     tree[k] = convert_tng_mass(tree[k])
     return trees
 
 
-def get_msmhmr(mstar, mvir, mass_bin=(11.5, 12.0), n_bins=11):
+def get_msmhmr(
+    mstar: np.ndarray,
+    mvir: np.ndarray,
+    *,
+    mass_bin: tuple[float, float],
+    n_bins: int = 11,
+):
     """Compute mean stellar mass to halo mass relation and deviation."""
     # NOTE: Previously mstar we use `Mstar_30pkpc`
     # both masses are assumed to be in log units
