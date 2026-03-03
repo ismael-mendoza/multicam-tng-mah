@@ -14,6 +14,41 @@ TNG_H = 0.6774  # from website
 MISSING = -999999999
 
 
+def get_mah_interpolated(mvir: np.ndarray):
+    assert mvir.shape[1] == 100
+    assert mvir.ndim == 2
+
+    n_snaps = 100
+    n_haloes = mvir.shape[0]
+    mah = np.zeros((n_haloes, n_snaps)) * np.nan
+
+    for ii in tqdm(range(n_haloes)):
+        mdm = mvir[ii, :]
+        _mask = mdm == 0
+        mdm[_mask] = np.nan
+
+        # linearly interpolate nan values
+        mdm = pd.Series(mdm)
+        mdm = mdm.interpolate(method="linear", limit_direction="both", axis=0)
+        mah[ii] = mdm.values
+
+    return mah
+
+
+def get_an_from_mpeak_mah(mpeak_mah: np.ndarray, *, scales: np.ndarray, ns: np.ndarray):
+    # get a_{n} (correctly with interpolation)
+    # mpeak_mah is the normalized mpeak, so that it monotonically increases and values all [0, 1]
+    assert scales.shape[0] == mpeak_mah.shape[1]
+    assert scales.ndim == 1 and mpeak_mah.ndim == 2
+    assert ns.ndim == 1
+    n_haloes = mpeak_mah.shape[0]
+    an = np.zeros((n_haloes, len(ns)))
+    for ii in range(n_haloes):
+        mah_ii = mpeak_mah[ii]
+        an[ii] = np.interp(ns, mah_ii, scales)
+    return an
+
+
 def get_vvir(rvir, mvir):
     """Get vvir from rvir and mvir.
 
