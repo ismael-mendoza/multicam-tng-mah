@@ -16,11 +16,7 @@ def multicam_prediction(x: ndarray, x_train: ndarray, y_train: ndarray):
     reg = linear_model.LinearRegression()
     reg.fit(xgt, ygt)
 
-    # get ranks for prediction and scale them to match training ranks
-    # TODO: is this necessary?
-    xr = rankdata(x, method="ordinal", axis=0) - 1  # 0 index ranks
-    xr = xr * (len(x_train) - 1) / (len(x) - 1)
-    xg = qt_gauss(xr, axis=0, method="ordinal")
+    xg = qt_gauss(x, axis=0, method="ordinal")
 
     yng = reg.predict(xg)
     yngt = reg.predict(xgt)
