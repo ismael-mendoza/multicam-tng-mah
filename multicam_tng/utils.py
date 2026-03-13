@@ -11,8 +11,6 @@ from tqdm import tqdm
 SNAPS = np.arange(0, 100, 1)
 TNG_H = 0.6774  # from website
 
-MISSING = -999999999
-
 
 def generate_randoms(*, lbox, n_randoms, rng=None):
     """Generate randoms to be used for tpcf_jackknife
@@ -143,6 +141,32 @@ def get_msmhmr(
     m_star_dev = mstar - np.log10(10 ** (m * mvir + b) * 10**mvir)
 
     return m_star_dev, (m, b)
+
+
+# train multicam on matches
+def match_bar_dmo(*, dmo_table, bar_table):
+
+    mask_bar = (
+        (bar_table["match_id"] != -1)
+        & (~np.isnan(bar_table["match_id"]))
+        & np.isin(bar_table["match_id"], dmo_table["subfind_id"])
+    )
+
+    mask_dmo = (
+        (dmo_table["match_id"] != -1)
+        & (~np.isnan(dmo_table["match_id"]))
+        & np.isin(dmo_table["match_id"], bar_table["subfind_id"])
+    )
+    sort_bar = np.argsort(bar_table["match_id"][mask_bar])
+    sort_dmo = np.argsort(dmo_table["subfind_id"][mask_dmo])
+
+    out_dmo = dmo_table[mask_dmo][sort_dmo]
+    out_bar = bar_table[mask_bar][sort_bar]
+
+    assert np.all(out_dmo["subfind_id"] == out_bar["match_id"])
+    assert np.all(out_bar["subfind_id"] == out_dmo["match_id"])
+
+    return out_dmo, out_bar
 
 
 def _reverse_trees(trees):
