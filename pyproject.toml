@@ -25,7 +25,7 @@ dependencies = [
 requires-python = ">= 3.11"
 
 [tool.uv.sources]
-multicam = { git = "https://github.com/ismael-mendoza/multicam", branch = "main" }
+multicam = { git = "https://github.com/ismael-mendoza/multicam", branch = "improve-multicam-1" }
 
 [project.optional-dependencies]
 dev = ["pytest", "ruff", "ipython", "ipykernel", "jupyter", "matplotlib"]
