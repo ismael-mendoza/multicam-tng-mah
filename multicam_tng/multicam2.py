@@ -173,8 +173,11 @@ def multicam_new_prediction_repeats(
 
     # we want to avoid repeats 'bunching up' to reproduce correct output distribution in ALL cases.
     # does not change rank order otherwise
+    # TODO: qt internally may already take care of this... but it's good to know that it is needed
     ygf = qt_gauss(yg, axis=0, method="ordinal")
 
+    # KEY: finally we want to reproduce some final 'true' distribution
+    # so we abundance match each corresponding target variable outputed from the LR prediction
     yp = np.full_like(ygf, fill_value=np.nan)
     for ii in range(n_targets):
         yp[:, ii] = qt(ygf[:, ii], y_true[:, ii])  # correctly interpolates
