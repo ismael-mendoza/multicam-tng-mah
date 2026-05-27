@@ -10,6 +10,7 @@ from tqdm import tqdm
 
 SNAPS = np.arange(0, 100, 1)
 TNG_H = 0.6774  # from website
+COLOR_CUT = 1.0
 
 
 def generate_randoms(*, lbox, n_randoms, rng=None):
